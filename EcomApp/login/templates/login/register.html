@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+
+{% block title %}Register | EcomApp{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px;margin:auto">
+    <h1>Create Account</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already registered?
+       <a href="{% url 'login:login' %}">Login</a>
+    </p>
+</div>
+{% endblock %}
