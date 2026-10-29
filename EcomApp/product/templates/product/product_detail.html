@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | EcomApp{% endblock %}
+
+{% block content %}
+<div class="card">
+    {% if product.image %}
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}"
+             style="width:100%;max-width:400px;max-height:350px;
+                    object-fit:contain">
+    {% endif %}
+
+    <h1>{{ product.name }}</h1>
+    <h2>₹{{ product.price|floatformat:2 }}</h2>
+    <p>{{ product.description }}</p>
+    <p>Available stock: {{ product.stock }}</p>
+
+    {% if product.stock > 0 %}
+    <form method="post"
+          action="{% url 'cart:add_to_cart' product.pk %}">
+        {% csrf_token %}
+        <label for="quantity">Quantity</label>
+        <input id="quantity" type="number" name="quantity"
+               value="1" min="1" max="{{ product.stock }}" required>
+        <button type="submit">Add to Cart</button>
+    </form>
+    {% endif %}
+</div>
+
+<section>
+    <h2>Customer Reviews</h2>
+
+    {% if average_rating %}
+        <p>Average rating: {{ average_rating|floatformat:1 }}/5</p>
+    {% else %}
+        <p>No ratings yet.</p>
+    {% endif %}
+
+    {% for review in reviews %}
+    <article class="card" style="margin-bottom:12px">
+        <strong>{{ review.user.username }}</strong>
+        <span>{{ review.rating }}/5</span>
+        <p>{{ review.comment }}</p>
+        <small class="muted">{{ review.created_at }}</small>
+    </article>
+    {% empty %}
+        <p>Be the first to review this product.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <div class="card">
+        <h3>Write or update your review</h3>
+        <form method="post"
+              action="{% url 'product:add_review' product.pk %}">
+            {% csrf_token %}
+            <label for="rating">Rating</label>
+            <select id="rating" name="rating" required>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very good</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Fair</option>
+                <option value="1">1 - Poor</option>
+            </select>
+
+            <br>
+            <textarea name="comment" rows="4"
+                      placeholder="Write your review..."></textarea>
+            <br>
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+    {% else %}
+        <p><a href="{% url 'login:login' %}">Log in</a>
+           to submit a review.</p>
+    {% endif %}
+</section>
+{% endblock %}
