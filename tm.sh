@@ -8,6 +8,6 @@
 
 # python manage.py createsuperuser
 #EcomApp123
-python manage.py runserver
+python /media/raj/Common/Mnit_mtech/programming_lab/lab9/EcomApp/EcomApp/manage.py runserver
 
 # pip freeze > requirements.txt
