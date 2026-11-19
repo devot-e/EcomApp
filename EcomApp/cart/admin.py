@@ -16,3 +16,5 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ("cart", "product", "quantity", "added_at")
+
+#This allows you to inspect users' carts and cart items through the admin panel.
